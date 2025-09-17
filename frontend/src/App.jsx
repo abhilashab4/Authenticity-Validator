@@ -1,15 +1,16 @@
-import { useState } from 'react';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import { useAuth } from './AuthContext';
+import LoginPage from './pages/LoginPage';
 import AdminPage from './pages/AdminPage';
+import UserPage from './pages/UserPage';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  return (
-    <div className="min-h-screen bg-base-200 flex justify-center items-center p-4">
-      {isLoggedIn ? <Dashboard setIsLoggedIn={setIsLoggedIn} /> : <Login setIsLoggedIn={setIsLoggedIn} />}
-    </div>
-  );
+  const { isLoggedIn, role } = useAuth();
+
+  if (isLoggedIn) {
+    return role === 'Admin' ? <AdminPage /> : <UserPage />;
+  } else {
+    return <LoginPage />;
+  }
 }
 
 export default App;
