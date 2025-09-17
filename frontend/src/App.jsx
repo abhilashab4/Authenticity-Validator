@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import AdminPage from './pages/AdminPage';
 
 function App() {
   return (
-    <div className='bg-black text-white text-2xl'> Hello world</div>
-  )
+    <div className="min-h-screen bg-base-200 flex justify-center items-center p-4">
+      <AdminPage />
+    </div>
+  );
 }
 
-export default App
+export default App;
