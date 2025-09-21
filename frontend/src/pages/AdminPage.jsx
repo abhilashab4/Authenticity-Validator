@@ -27,7 +27,7 @@ function AdminPage() {
 
     formData.append('institutionName', institution);
     try {
-      const res = await fetch('http://localhost:8000/upload', {
+      const res = await fetch('http://localhost:8000/auth/issue/', {
         method: 'POST',
         body: formData,
       });

@@ -98,18 +98,27 @@ def embed_qr_in_pdf(pdf_file, qr_file, output_path):
 
 
 
+import tempfile
+import cv2
+import numpy as np
+from urllib.parse import urlparse, parse_qs
+from pdf2image import convert_from_path
 
 
 def extract_cert_id_from_pdf(pdf_file):
     """
     Extract certificate ID from QR code in uploaded PDF using OpenCV.
-    pdf_file: Django InMemoryUploadedFile
+    Supports both Django UploadedFile and BytesIO/normal file-like objects.
+
     Returns: certificate ID string or None if not found
     """
-    # Step 1: Save uploaded PDF to temporary file
+    # Step 1: Save to temporary file (works for both UploadedFile and BytesIO)
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
-        for chunk in pdf_file.chunks():
-            tmp.write(chunk)
+        if hasattr(pdf_file, "chunks"):  # Django UploadedFile
+            for chunk in pdf_file.chunks():
+                tmp.write(chunk)
+        else:  # BytesIO or file-like
+            tmp.write(pdf_file.read())
         tmp_path = tmp.name
 
     # Step 2: Convert PDF pages to images
@@ -121,18 +130,15 @@ def extract_cert_id_from_pdf(pdf_file):
     # Step 4: Loop through images and decode QR code
     for pil_image in images:
         cv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
-
-        # detectAndDecode returns: data, points, straight_qrcode
         data, points, _ = detector.detectAndDecode(cv_image)
         if data:
-            # Step 5: Extract certificate ID from URL (if needed)
+            # Step 5: Extract certificate ID from URL or plain text
             parsed_url = urlparse(data)
             query_params = parse_qs(parsed_url.query)
             cert_id = query_params.get("cert_id")  # adjust key based on QR URL
             if cert_id:
                 return cert_id[0]
             else:
-                return data  # If QR contains plain certificate ID
+                return data  # QR contained just the cert_id
 
-    # No QR code found
     return None
