@@ -6,11 +6,13 @@ import CertificateCounter from '../components/CertificateCounter';
 export default function UserPage() {
   const { logout } = useAuth();
   const [fakeCount, setFakeCount] = useState(0);
+  const [scanOutput, setScanOutput] = useState('');
 
   const handleFileSubmit = (file) => {
     // Logic to count fake certificates will be added here later
     // For now, set a dummy count
     setFakeCount(Math.floor(Math.random() * 10)); // Dummy logic
+    setScanOutput('Scanning PDF...'); // Dummy output
   };
 
   return (
@@ -25,6 +27,16 @@ export default function UserPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <CertificateFileUpload onSubmit={handleFileSubmit} />
           <CertificateCounter fakeCount={fakeCount} />
+        </div>
+        <div className="mt-6">
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body">
+              <h3 className="card-title">Scan Output</h3>
+              <div className="bg-base-200 p-4 rounded-lg min-h-[100px]">
+                <p className="text-sm">{scanOutput || 'No output yet. Upload a PDF to start scanning.'}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
