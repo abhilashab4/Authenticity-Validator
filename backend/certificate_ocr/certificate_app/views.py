@@ -70,10 +70,8 @@ def upload_certificate(request):
         image = np.array(pil_image)
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-        # Skip cropping — use full image
         processed = preprocess_image(image)
 
-        # Save debug images
         cv2.imwrite("debug_before.jpg", image)
         cv2.imwrite("debug_after.jpg", processed)
 
