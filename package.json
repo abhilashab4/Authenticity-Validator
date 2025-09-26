@@ -1,0 +1,20 @@
+{
+  "name": "authenticity-validator",
+  "version": "1.0.0",
+  "description": "Certificate Authenticity Validator - Full Stack Application",
+  "scripts": {
+    "start": "bash start.sh",
+    "start:windows": "start.bat",
+    "setup": "git update-index --skip-worktree backend/db.sqlite3 && git update-index --skip-worktree backend/qr.png",
+    "backend": "cd backend && source venv/bin/activate && python manage.py runserver 8000",
+    "frontend": "cd frontend && npm run dev",
+    "install:all": "cd backend && python -m venv venv && source venv/bin/activate && pip install -r requirements.txt && cd ../frontend && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abhilashab4/Authenticity-Validator.git"
+  },
+  "keywords": ["certificate", "validation", "authenticity", "django", "react"],
+  "author": "Your Name",
+  "license": "MIT"
+}
