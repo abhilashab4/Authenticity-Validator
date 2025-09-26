@@ -9,7 +9,7 @@ export default function Header() {
         <div className="flex items-center space-x-4">
           {/* Placeholder for Government Emblem */}
           <div className="w-12 h-12 rounded-full flex items-center justify-center">
-            <img src="/Jharkhand_Rajakiya_Chihna.svg.png" alt="Government Emblem"/>
+            JK
           </div>
           <div>
             <h1 className="text-xl font-bold">Government of Jharkhand</h1>

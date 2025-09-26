@@ -63,7 +63,7 @@ def generate_qr(cert_id, filename="qr.png"):
     qr = qrcode.QRCode(
         version=2,  # controls size of QR code; higher = bigger
         error_correction=ERROR_CORRECT_H,  # High error correction
-        box_size=10,  # size of each box in pixels
+        box_size=20,  # size of each box in pixels
         border=4,  # thickness of border (default 4)
     )
 
@@ -88,11 +88,23 @@ def embed_qr_in_pdf(pdf_file, qr_file, output_path):
     pdf_bytes = pdf_file.read()
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     page = doc[0]
-
-    rect = fitz.Rect(400, 600, 500, 700)  
-
-    page.insert_image(rect, filename=qr_file)
-
+    page_rect = page.rect
+    qr_size = 64  # Small size
+    
+    # Load QR image and get its dimensions
+    qr_img = fitz.open(qr_file)
+    qr_page = qr_img[0]
+    qr_pix = qr_page.get_pixmap()
+    
+    # Force bottom-right by inserting as pixmap directly
+    # Bottom-right corner coordinates
+    x = page_rect.width - qr_size
+    y = page_rect.height - qr_size
+    
+    print(f"Page rect: {page_rect}, inserting at ({x}, {y})")
+    
+    # Insert pixmap at specific coordinates
+    page.insert_image(fitz.Rect(x, y, x + qr_size, y + qr_size), pixmap=qr_pix)
     doc.save(output_path)
     return output_path
 

@@ -22,3 +22,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Project related
+.env
+.env.local
+.env.*.local
+node_modules/
+backend/validateapp/migrations/__pycache__/*
+backend/backend/__pycache__/*
+backend/validateapp/__pycache__/*
+backend/__pycache__/*
+__pycache__/*
+*.pyc
+*.pyo
+*.pyd
+backend/media/

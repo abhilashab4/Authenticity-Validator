@@ -20,8 +20,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50">
       <div className="card w-full max-w-lg shadow-2xl bg-base-100 rounded-2xl p-10 border border-base-300">
         <div className="text-center mb-8">
-          <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <img src="/Jharkhand_Rajakiya_Chihna.svg.png" alt="Government Emblem"/>
+          <div className="w-20 h-20 rounded-full bg-blue-800 text-white flex items-center justify-center mx-auto mb-4">
+            JK
           </div>
           <h1 className="text-4xl font-bold text-base-content mb-2">
             Authenticity Validator
