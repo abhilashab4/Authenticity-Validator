@@ -78,12 +78,11 @@ def generate_qr(cert_id, filename="qr.png"):
 
     return filename
 
-def embed_qr_in_pdf(pdf_file, qr_file, output_path):
+
+def embed_qr_in_pdf(pdf_file, qr_file, output_path, qr_size=100, margin=20, step=10):
     """
-    Embed QR code image into uploaded PDF and save as output_path.
-    pdf_file: InMemoryUploadedFile
-    qr_file: path to QR code PNG
-    output_path: where to save the final PDF
+    Embed QR code in the largest blank rectangle near the bottom of the first page.
+    If space not available, move upwards to find a free spot.
     """
     pdf_bytes = pdf_file.read()
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
@@ -107,7 +106,6 @@ def embed_qr_in_pdf(pdf_file, qr_file, output_path):
     page.insert_image(fitz.Rect(x, y, x + qr_size, y + qr_size), pixmap=qr_pix)
     doc.save(output_path)
     return output_path
-
 
 
 import tempfile
