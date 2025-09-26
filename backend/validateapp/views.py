@@ -1,4 +1,5 @@
 import os
+import shutil
 import io
 import zipfile
 import tempfile
@@ -94,7 +95,7 @@ class IssueCertificateView(APIView):
             # Move ZIP to MEDIA_ROOT for frontend download
             final_path = os.path.join(settings.MEDIA_ROOT, "certificates_with_qr.zip")
             os.makedirs(os.path.dirname(final_path), exist_ok=True)
-            os.replace(output_zip_path, final_path)
+            shutil.move(output_zip_path, final_path)
 
         download_url = request.build_absolute_uri(settings.MEDIA_URL + "certificates_with_qr.zip")
         return JsonResponse({
