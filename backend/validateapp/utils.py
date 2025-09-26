@@ -77,24 +77,63 @@ def generate_qr(cert_id, filename="qr.png"):
     qr_img.save(filename)
 
     return filename
+import fitz  # PyMuPDF
 
-def embed_qr_in_pdf(pdf_file, qr_file, output_path):
+def embed_qr_in_pdf(pdf_file, qr_file, output_path, qr_size=100):
     """
-    Embed QR code image into uploaded PDF and save as output_path.
-    pdf_file: InMemoryUploadedFile
-    qr_file: path to QR code PNG
-    output_path: where to save the final PDF
+    Find the largest blank rectangle in the first page of PDF and embed QR code.
     """
     pdf_bytes = pdf_file.read()
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     page = doc[0]
+    page_rect = page.rect
 
-    rect = fitz.Rect(400, 600, 500, 700)  
+    # Collect occupied areas (text + images)
+    occupied = []
 
-    page.insert_image(rect, filename=qr_file)
+    # Text blocks
+    for block in page.get_text("blocks"):
+        occupied.append(fitz.Rect(block[:4]))
+
+    # Images
+    for img in page.get_images(full=True):
+        xref = img[0]
+        for r in page.get_image_rects(xref):
+            occupied.append(r)
+
+    # Candidate positions to test (grid scanning)
+    step = 20  # granularity, smaller = more accurate but slower
+    best_rect = None
+    best_area = 0
+
+    for y in range(0, int(page_rect.height - qr_size), step):
+        for x in range(0, int(page_rect.width - qr_size), step):
+            candidate = fitz.Rect(x, y, x + qr_size, y + qr_size)
+
+            # Check overlap
+            if any(candidate.intersects(r) for r in occupied):
+                continue
+
+            area = candidate.get_area()
+            if area > best_area:
+                best_area = area
+                best_rect = candidate
+
+    if best_rect:
+        page.insert_image(best_rect, filename=qr_file)
+    else:
+        # fallback: bottom-right
+        best_rect = fitz.Rect(
+            page_rect.x1 - qr_size - 20,
+            page_rect.y1 - qr_size - 20,
+            page_rect.x1 - 20,
+            page_rect.y1 - 20
+        )
+        page.insert_image(best_rect, filename=qr_file)
 
     doc.save(output_path)
     return output_path
+
 
 
 
