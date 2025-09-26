@@ -21,12 +21,12 @@ export default function LoginPage() {
       <div className="card w-full max-w-lg shadow-2xl bg-base-100 rounded-2xl p-10 border border-base-300">
         <div className="text-center mb-8">
           <div className="w-20 h-20 rounded-full bg-blue-800 text-white flex items-center justify-center mx-auto mb-4">
-            JK
+            AVFA
           </div>
           <h1 className="text-4xl font-bold text-base-content mb-2">
             Authenticity Validator
           </h1>
-          <p className="text-base-content/70">Government of Jharkhand</p>
+          <p className="text-base-content/70">Authenticity Validator for Academia</p>
           <p className="text-sm text-base-content/50 mt-2">Secure Login Portal</p>
         </div>
 

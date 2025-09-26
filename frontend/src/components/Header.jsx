@@ -9,10 +9,10 @@ export default function Header() {
         <div className="flex items-center space-x-4">
           {/* Placeholder for Government Emblem */}
           <div className="w-12 h-12 rounded-full flex items-center justify-center">
-            JK
+            AVFA
           </div>
           <div>
-            <h1 className="text-xl font-bold">Government of Jharkhand</h1>
+            <h1 className="text-xl font-bold">Authenticity Validator for Academia</h1>
             <p className="text-sm opacity-90">Authenticity Validator</p>
           </div>
         </div>
