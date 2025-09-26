@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useAuth } from "../AuthContext";
 import CertificateFileUpload from "../components/CertificateFileUpload";
 import CertificateCounter from "../components/CertificateCounter";
 
 export default function UserPage() {
-  const { logout } = useAuth();
   const [fakeCount, setFakeCount] = useState(0);
   const [scanOutput, setScanOutput] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -41,59 +39,65 @@ export default function UserPage() {
 
   return (
     <div className="min-h-screen bg-base-200 flex justify-center items-center p-4">
-      <div className="w-full max-w-5xl">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold">User Dashboard</h2>
-          <button className="btn btn-secondary" onClick={logout}>
-            Logout
-          </button>
-        </div>
+      <div className="w-full max-w-6xl">
+        <h2 className="text-4xl font-bold mb-8 text-center">User Dashboard</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <CertificateFileUpload onSubmit={handleFileSubmit} />
           <CertificateCounter fakeCount={fakeCount} />
         </div>
 
-        <div className="mt-6">
+        <div className="mt-8">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-              <h3 className="card-title">Scan Output</h3>
-              <div className="bg-base-200 p-4 rounded-lg min-h-[150px] text-sm overflow-x-auto">
-                {loading && <p>⏳ Scanning in progress...</p>}
+              <h3 className="card-title text-2xl">Scan Results</h3>
+              <div className="bg-base-200 p-6 rounded-lg min-h-[200px] text-sm overflow-x-auto">
+                {loading && (
+                  <div className="flex items-center justify-center">
+                    <span className="loading loading-spinner loading-lg"></span>
+                    <span className="ml-2">Scanning in progress...</span>
+                  </div>
+                )}
 
                 {!loading && !scanOutput && (
-                  <p>No output yet. Upload a PDF/ZIP to start scanning.</p>
+                  <p className="text-center text-gray-500">
+                    No output yet. Upload a PDF/ZIP to start scanning.
+                  </p>
                 )}
 
                 {!loading && Array.isArray(scanOutput) && (
-                  <table className="table w-full">
-                    <thead>
-                      <tr>
-                        <th>File</th>
-                        <th>Status</th>
-                        <th>Issuer / Message</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {scanOutput.map((result, idx) => (
-                        <tr key={idx}>
-                          <td>{result.file || "-"}</td>
-                          <td
-                            className={
-                              result.status === "valid"
-                                ? "text-green-600 font-semibold"
-                                : result.status === "fake"
-                                ? "text-red-600 font-semibold"
-                                : "text-yellow-600 font-semibold"
-                            }
-                          >
-                            {result.status}
-                          </td>
-                          <td>{result.issuer || result.message || "-"}</td>
+                  <div className="overflow-x-auto">
+                    <table className="table w-full">
+                      <thead>
+                        <tr className="bg-base-300">
+                          <th>File Name</th>
+                          <th>Status</th>
+                          <th>Details</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {scanOutput.map((result, idx) => (
+                          <tr key={idx} className="hover:bg-base-300">
+                            <td className="font-medium">{result.file || "-"}</td>
+                            <td>
+                              <span
+                                className={`badge ${
+                                  result.status === "valid"
+                                    ? "badge-success"
+                                    : result.status === "fake"
+                                    ? "badge-error"
+                                    : "badge-warning"
+                                }`}
+                              >
+                                {result.status}
+                              </span>
+                            </td>
+                            <td>{result.issuer || result.message || "-"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
 
                 {!loading &&

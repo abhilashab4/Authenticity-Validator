@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { useAuth } from '../AuthContext';
 import InstitutionForm from '../components/InstitutionForm';
 import FileUpload from '../components/FileUpload';
 import ResponseBox from '../components/ResponseBox';
 
-function AdminPage() {
-  const { logout } = useAuth();
+function InstitutionPage() {
   const [institution, setInstitution] = useState('');
   const [response, setResponse] = useState('');
   const [instError, setInstError] = useState(false);
@@ -39,13 +37,8 @@ function AdminPage() {
   };
 
   return (
-    <div className="w-full max-w-2xl bg-base-100 shadow-xl rounded-lg p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-center flex-1">Admin Upload Panel</h2>
-        <button className="btn btn-secondary" onClick={logout}>
-          Logout
-        </button>
-      </div>
+    <div className="w-full max-w-4xl bg-base-100 shadow-xl rounded-lg p-8 mx-auto">
+      <h2 className="text-4xl font-bold text-center mb-8">Institution Upload Panel</h2>
       <InstitutionForm institution={institution} setInstitution={setInstitution} error={instError} />
       <FileUpload onSubmit={handleFileSubmit} error={fileError} />
       <ResponseBox message={response} />
@@ -53,4 +46,4 @@ function AdminPage() {
   );
 }
 
-export default AdminPage;
+export default InstitutionPage;
